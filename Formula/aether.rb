@@ -1,22 +1,20 @@
 class Aether < Formula
   desc "Minimal but powerful agent in your terminal"
   homepage "https://github.com/lingjiuu/aether"
-  url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-0.1.1.tgz"
-  sha256 "815358dd4c911a6ec54a1b0ba4a09ccd5de815738826da1eb3689324c5952973"
-  version "0.1.1"
-  revision 1
+  url "https://github.com/lingjiuu/aether/releases/download/v0.2.0/lingjiuu-aether-0.2.0.tgz"
+  sha256 "8bcaa3924fa50ad3f37fa9d63302f937007596c511d74f4fa98a778aefba29e6"
 
   depends_on "node"
 
   if OS.mac? && Hardware::CPU.arm?
     resource "aether-backend" do
-      url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-darwin-arm64-0.1.1.tgz"
-      sha256 "e9e0d9bef7cf4332cd609ea6e7710149e1baa8b404c3b7e5eae0efd1edb5a458"
+      url "https://github.com/lingjiuu/aether/releases/download/v0.2.0/lingjiuu-aether-darwin-arm64-0.2.0.tgz"
+      sha256 "dd591dc1891266c4ef2be4b1cb87ab6449378c243484fc606be58647eeed5eca"
     end
   elsif OS.mac? && Hardware::CPU.intel?
     resource "aether-backend" do
-      url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-darwin-x64-0.1.1.tgz"
-      sha256 "ffe62809f2bc284a2c0d716ce2ff52316f1d759672a8e1e23097887301803bdc"
+      url "https://github.com/lingjiuu/aether/releases/download/v0.2.0/lingjiuu-aether-darwin-x64-0.2.0.tgz"
+      sha256 "917a142cfa7c7d826252048834ee1af54a602e396923c8d48f9afc332971f730"
     end
   end
 
@@ -25,17 +23,19 @@ class Aether < Formula
 
     ENV.prepend_path "PATH", Formula["node"].opt_bin
 
-    system "npm", "install", *std_npm_args(prefix: libexec), "--omit=optional"
+    system "npm", "install", *std_npm_args(prefix: libexec), "--omit=optional", "--ignore-scripts"
 
     package_root = libexec/"lib/node_modules/@lingjiuu/aether"
     resource("aether-backend").stage do
-      package_root.install "bin/aether-backend"
+      package_root.install "backend"
+      package_root.install "runtime"
     end
-    chmod 0755, package_root/"aether-backend"
+    chmod 0755, package_root/"runtime/bin/java"
 
     (bin/"aether").write <<~EOS
       #!/bin/bash
-      export AETHER_BACKEND_COMMAND="#{package_root}/aether-backend"
+      export AETHER_BACKEND_COMMAND="#{package_root}/runtime/bin/java"
+      export AETHER_BACKEND_ARGS="-jar #{package_root}/backend/aether-backend.jar --stdio"
       exec "#{Formula["node"].opt_bin}/node" "#{package_root}/dist/main.js" "$@"
     EOS
   end
@@ -43,7 +43,8 @@ class Aether < Formula
   test do
     package_root = libexec/"lib/node_modules/@lingjiuu/aether"
     assert_path_exists package_root/"dist/main.js"
-    assert_path_exists package_root/"aether-backend"
+    assert_path_exists package_root/"backend/aether-backend.jar"
+    assert_path_exists package_root/"runtime/bin/java"
     assert_path_exists bin/"aether"
   end
 end
