@@ -24,13 +24,11 @@ class Aether < Formula
 
     ENV.prepend_path "PATH", Formula["node"].opt_bin
 
-    cd "package" do
-      system "npm", "install", *std_npm_args(prefix: libexec), "--omit=optional"
-    end
+    system "npm", "install", *std_npm_args(prefix: libexec), "--omit=optional"
 
     package_root = libexec/"lib/node_modules/@lingjiuu/aether"
     resource("aether-backend").stage do
-      package_root.install "package/bin/aether-backend"
+      package_root.install "bin/aether-backend"
     end
     chmod 0755, package_root/"aether-backend"
 
