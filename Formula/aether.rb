@@ -4,6 +4,7 @@ class Aether < Formula
   url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-0.1.1.tgz"
   sha256 "815358dd4c911a6ec54a1b0ba4a09ccd5de815738826da1eb3689324c5952973"
   version "0.1.1"
+  revision 1
 
   depends_on "node"
 
@@ -34,6 +35,7 @@ class Aether < Formula
 
     (bin/"aether").write <<~EOS
       #!/bin/bash
+      export AETHER_BACKEND_COMMAND="#{package_root}/aether-backend"
       exec "#{Formula["node"].opt_bin}/node" "#{package_root}/dist/main.js" "$@"
     EOS
   end
