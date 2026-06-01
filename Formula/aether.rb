@@ -1,21 +1,21 @@
 class Aether < Formula
   desc "Minimal but powerful agent in your terminal"
   homepage "https://github.com/lingjiuu/aether"
-  url "https://github.com/lingjiuu/aether/releases/download/v0.1.0/lingjiuu-aether-0.1.0.tgz"
-  sha256 "ee54403ffa064aa0fe91fb6ba84616eb33fc9ed2ce8c6aa89736b5d61b4fc926"
-  version "0.1.0"
+  url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-0.1.1.tgz"
+  sha256 "815358dd4c911a6ec54a1b0ba4a09ccd5de815738826da1eb3689324c5952973"
+  version "0.1.1"
 
   depends_on "node"
 
   if OS.mac? && Hardware::CPU.arm?
     resource "aether-backend" do
-      url "https://github.com/lingjiuu/aether/releases/download/v0.1.0/lingjiuu-aether-darwin-arm64-0.1.0.tgz"
-      sha256 "378dae18cefce3096bf9a3ae1f3bf83d8d25a0eadc85528ca8432c0a1463bbe3"
+      url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-darwin-arm64-0.1.1.tgz"
+      sha256 "e9e0d9bef7cf4332cd609ea6e7710149e1baa8b404c3b7e5eae0efd1edb5a458"
     end
   elsif OS.mac? && Hardware::CPU.intel?
     resource "aether-backend" do
-      url "https://github.com/lingjiuu/aether/releases/download/v0.1.0/lingjiuu-aether-darwin-x64-0.1.0.tgz"
-      sha256 "c100f9f99a109983ea14c4c4445de94dbf5ec973d0ee4f93b1a5c23dd11aa776"
+      url "https://github.com/lingjiuu/aether/releases/download/v0.1.1/lingjiuu-aether-darwin-x64-0.1.1.tgz"
+      sha256 "ffe62809f2bc284a2c0d716ce2ff52316f1d759672a8e1e23097887301803bdc"
     end
   end
 
